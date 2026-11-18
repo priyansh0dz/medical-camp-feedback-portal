@@ -1,0 +1,35 @@
+<%-- Pages must declare the "c" taglib themselves (they use it before including this file). --%>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<c:set var="ctx" value="${pageContext.request.contextPath}" />
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title><c:out value="${pageTitle}" /> | Medical Camp Feedback Portal</title>
+    <link rel="stylesheet" href="${ctx}/css/style.css">
+</head>
+<body>
+<header class="site-header">
+    <div class="container">
+        <a class="brand" href="${ctx}/index.jsp"><span class="logo" aria-hidden="true">+</span> Medical Camp Feedback</a>
+        <nav class="nav" aria-label="Main">
+            <a href="${ctx}/index.jsp" class="${activeNav == 'home' ? 'active' : ''}">Home</a>
+            <a href="${ctx}/feedback" class="${activeNav == 'feedback' ? 'active' : ''}">Give feedback</a>
+            <c:choose>
+                <c:when test="${not empty sessionScope.adminUser}">
+                    <a href="${ctx}/admin/dashboard" class="${activeNav == 'dashboard' ? 'active' : ''}">Dashboard</a>
+                    <form method="post" action="${ctx}/logout">
+                        <input type="hidden" name="csrf" value="<%= com.medcamp.util.Csrf.token(request) %>">
+                        <button type="submit" class="linklike">Log out</button>
+                    </form>
+                </c:when>
+                <c:otherwise>
+                    <a href="${ctx}/login" class="${activeNav == 'login' ? 'active' : ''}">Admin login</a>
+                </c:otherwise>
+            </c:choose>
+        </nav>
+    </div>
+</header>
+<main>
